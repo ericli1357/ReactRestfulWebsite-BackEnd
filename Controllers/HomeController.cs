@@ -21,9 +21,9 @@ namespace ReactRestfulWebsite.Controllers
         }
 
         [HttpPost("sendEmail")]
-        public ActionResult SendEmail(Message me)
+        public ActionResult SendEmail(Message m)
         {
-            _emailSender.SendEmail(me);
+            _emailSender.SendEmail(m);
             return NoContent();
         }
     }
