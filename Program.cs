@@ -1,17 +1,14 @@
 using EmailService;
 using Microsoft.Extensions.Configuration;
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
+    options.AddDefaultPolicy(
                       policy =>
                       {
-                          policy.WithOrigins("http://example.com",
-                                              "http://www.contoso.com");
+                          policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
                       });
 });
 
@@ -26,6 +23,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -37,7 +35,7 @@ else
     app.UseHttpsRedirection();
 }
 app.UseRouting();
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors();
 
 
 app.MapControllerRoute(

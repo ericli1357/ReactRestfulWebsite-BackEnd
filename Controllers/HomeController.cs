@@ -20,12 +20,10 @@ namespace ReactRestfulWebsite.Controllers
             _emailSender = emailSender;
         }
 
-        [EnableCors("AllowOrigin")]
         [HttpPost("sendEmail")]
-        public  ActionResult SendEmail()
+        public ActionResult SendEmail(Message m)
         {
-            var message = new Message(new string[] { "erichxli@gmail.com" }, "Test email", "This is the content from our email.");
-            _emailSender.SendEmail(message);
+            _emailSender.SendEmail(m);
             return NoContent();
         }
     }
