@@ -1,7 +1,16 @@
 using EmailService;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Serialization;
+using ReactRestfulWebsite.Data;
+using ReactRestfulWebsite.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<ReactRestfulWebsiteContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 builder.Services.AddCors(options =>
 {
@@ -14,6 +23,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddSingleton(builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -41,6 +51,10 @@ app.UseCors();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=SendEmail}"
+    );
+app.MapControllerRoute(
+    name: "category",
+    pattern: "{controller=Category}/{action=GetAllCategories}"
     );
 
 app.Run();

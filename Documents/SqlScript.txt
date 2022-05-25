@@ -1,0 +1,97 @@
+﻿USE master;
+GO
+
+IF Db_Id (N'ReactRestfulWebsite') IS NOT NULL
+DROP DATABASE ReactRestfulWebsite;
+GO
+
+CREATE DATABASE ReactRestfulWebsite
+ON
+( NAME=ReactRestfulWebsite_dat,
+FILENAME='C:\ReactRestfulWebsite\DbFiles\ReactRestfulWebsite.mdf'
+)
+LOG ON
+(NAME=ReactRestfulWebsite_log,
+FILENAME='C:\ReactRestfulWebsite\DbFiles\ReactRestfulWebsite.ldf');
+GO
+
+USE ReactRestfulWebsite
+go
+
+DROP TABLE IF EXISTS [dbo].[CategoryArticle]
+go
+
+DROP TABLE IF EXISTS [dbo].[Category]
+go
+
+DROP TABLE IF EXISTS [dbo].[Article]
+go
+
+CREATE TABLE Category(
+CategoryId INT PRIMARY KEY IDENTITY(1,1),
+CategoryName VARCHAR(50) NOT NULL
+)
+go
+
+CREATE TABLE Article(
+ArticleId INT PRIMARY KEY IDENTITY(1,1),
+Body VARCHAR(MAX) NOT NULL,
+Title VARCHAR(50) NOT NULL,
+DatePublished DATETIME NOT NULL
+)
+go
+
+CREATE TABLE CategoryArticle(
+    CategoryId int NOT NULL,
+	ArticleId int NOT NULL,
+    CONSTRAINT PK_CategoryArticle PRIMARY KEY (CategoryId, ArticleId),
+    CONSTRAINT FK_CategoryArticle_Categories_CategoriesId FOREIGN KEY (CategoryId) REFERENCES Category (CategoryId) ON DELETE CASCADE,
+    CONSTRAINT FK_CategoryArticle_Articles_ArticlesId FOREIGN KEY (ArticleId) REFERENCES Article (ArticleId) ON DELETE CASCADE
+)
+go
+
+INSERT INTO Category (CategoryName) VALUES ('.NET 6');
+INSERT INTO Category (CategoryName) VALUES ('HTML5');
+INSERT INTO Category (CategoryName) VALUES ('JavaScript');
+INSERT INTO Category (CategoryName) VALUES ('CSS3');
+INSERT INTO Category (CategoryName) VALUES ('Bootstrap');
+INSERT INTO Category (CategoryName) VALUES ('MS SQL Server');
+INSERT INTO Category (CategoryName) VALUES ('React');
+INSERT INTO Category (CategoryName) VALUES ('JSON');
+
+INSERT INTO Article(Body, Title, DatePublished) VALUES ('.NET 6 - 1', 'Title .NET 6 - 1', '20210111 01:11:11 PM');
+INSERT INTO Article(Body, Title, DatePublished) VALUES ('.NET 6 - 2', 'Title .NET 6 - 2', '20210212 02:22:22 PM');
+INSERT INTO Article(Body, Title, DatePublished) VALUES ('.NET 6 - 3', 'Title .NET 6 - 3', '20210313 03:33:33 PM');
+INSERT INTO Article(Body, Title, DatePublished) VALUES ('.NET 6 - 4', 'Title .NET 6 - 4', '20210411 01:11:11 PM');
+INSERT INTO Article(Body, Title, DatePublished) VALUES ('.NET 6 - 5', 'Title .NET 6 - 5', '20210512 02:22:22 PM');
+INSERT INTO Article(Body, Title, DatePublished) VALUES ('HTML5 - 1', 'Title HTML5 - 1', '20210613 03:33:33 PM');
+INSERT INTO Article(Body, Title, DatePublished) VALUES ('HTML5 - 2', 'Title HTML5 - 2', '20210711 01:11:11 PM');
+INSERT INTO Article(Body, Title, DatePublished) VALUES ('JavaScript - 1', 'Title JavaScript - 1', '20210812 02:22:22 PM');
+INSERT INTO Article(Body, Title, DatePublished) VALUES ('JavaScript - 2', 'Title  JavaScript - 2', '20210913 03:33:33 PM');
+INSERT INTO Article(Body, Title, DatePublished) VALUES ('JavaScript - 3', 'Title  JavaScript - 3', '20211011 01:11:11 PM');
+INSERT INTO Article(Body, Title, DatePublished) VALUES ('.NET 6 - 6', 'Title .NET 6 - 6', '20211112 02:22:22 PM');
+go
+
+INSERT INTO CategoryArticle(CategoryId, ArticleId) VALUES (1,1);
+INSERT INTO CategoryArticle(CategoryId, ArticleId) VALUES (1,2);
+INSERT INTO CategoryArticle(CategoryId, ArticleId) VALUES (1,3);
+INSERT INTO CategoryArticle(CategoryId, ArticleId) VALUES (1,4);
+INSERT INTO CategoryArticle(CategoryId, ArticleId) VALUES (1,5);
+INSERT INTO CategoryArticle(CategoryId, ArticleId) VALUES (2,6);
+INSERT INTO CategoryArticle(CategoryId, ArticleId) VALUES (2,7);
+INSERT INTO CategoryArticle(CategoryId, ArticleId) VALUES (3,8);
+INSERT INTO CategoryArticle(CategoryId, ArticleId) VALUES (3,9);
+INSERT INTO CategoryArticle(CategoryId, ArticleId) VALUES (3,10);
+INSERT INTO CategoryArticle(CategoryId, ArticleId) VALUES (1,11);
+go
+
+SELECT * FROM Category;
+SELECT * FROM Article;
+SELECT * FROM CategoryArticle;
+
+SELECT Category.CategoryName, Article.Body, Article.Title
+FROM ((CategoryArticle
+INNER JOIN Category ON CategoryArticle.CategoryId=Category.CategoryId)
+INNER JOIN Article ON CategoryArticle.ArticleId=Article.ArticleId)
+GROUP BY Category.CategoryName,Article.Body, Article.Title
+ORDER BY Category.CategoryName DESC;
