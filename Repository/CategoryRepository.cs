@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ReactRestfulWebsite.Data;
-using ReactRestfulWebsite.Models;
 
 namespace ReactRestfulWebsite.Repository
 {
@@ -13,9 +12,9 @@ namespace ReactRestfulWebsite.Repository
             _context = context;
         }
 
-        public async Task<List<CategoryModel>> GetAllCategoriesAsync()
+        public async Task<List<Category>> GetAllCategoriesAsync()
         {
-            var records=await _context.Category.Select(x=>new CategoryModel()
+            var records=await _context.Category.Select(x=>new Category()
             {
                  CategoryId = x.CategoryId,
                  CategoryName = x.CategoryName

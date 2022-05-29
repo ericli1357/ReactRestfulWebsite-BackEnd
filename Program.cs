@@ -24,6 +24,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddSingleton(builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -55,6 +56,10 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "category",
     pattern: "{controller=Category}/{action=GetAllCategories}"
+    );
+app.MapControllerRoute(
+    name: "article",
+    pattern: "{controller=Article}/{action=GetAllArticles}"
     );
 
 app.Run();

@@ -1,9 +1,9 @@
-﻿using ReactRestfulWebsite.Models;
+﻿using ReactRestfulWebsite.Data;
 
 namespace ReactRestfulWebsite.Repository
 {
     public interface ICategoryRepository
     {
-        Task<List<CategoryModel>> GetAllCategoriesAsync();
+        Task<List<Category>> GetAllCategoriesAsync();
     }
 }
